@@ -13,7 +13,7 @@ fromCRAN <- c(
 fromBioC <- c("minfi", "missMethyl", "ENmix","IlluminaHumanMethylation450kanno.ilmn12.hg19",
                       "IlluminaHumanMethylation450kmanifest", "IlluminaHumanMethylationEPICmanifest",
                       "sva", "IlluminaHumanMethylationEPICanno.ilm10b2.hg19","illuminaio", 
-                      "DMRcate", "shinyMethyl","bumphunter","wateRmelon","FDb.InfiniumMethylation.hg19","DMRcatedata","ChAMP")
+                      "DMRcate", "shinyMethyl","bumphunter","wateRmelon","FDb.InfiniumMethylation.hg19","DMRcatedata","ChAMP","FlowSorted.Blood.450k")
 
 #' install these from CRAN:
 toinstallCRAN <- setdiff(fromCRAN, installed.packages()[,1])
@@ -25,7 +25,7 @@ if(length(toinstallCRAN >= 1)) {
 
 if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
-BiocManager::install(version = "3.12")
+BiocManager::install(version = "3.14")
 
 #' install these from BioConductor:
 toinstallBioC <- setdiff(fromBioC, installed.packages()[,1])

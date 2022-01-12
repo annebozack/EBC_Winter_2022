@@ -2,6 +2,8 @@ options(warn=-1)
 library(data.table)
 suppressMessages(library(limma))
 suppressMessages(library(ENmix))
+suppressMessages(library(sva))
+suppressMessages(library(ChAMP))
 options(warn=0)
 
 
@@ -25,6 +27,26 @@ plotMDS(betas.clean, top=10000, gene.selection="common",
         dim=c(1,2),cex=1.5)
 legend("center", legend=levels(factor(pheno$sex)),bty='n',
        cex=1.5,pch=17,col=c("deeppink","blue"))
+       
+# Let's look at the effect of technical variables
+# Row
+cols <- rainbow(n = length(levels(factor(pheno$row))))
+plotMDS(betas.clean, top=10000, gene.selection="common",
+        pch=17,col=cols[factor(pheno$row)],
+        dim=c(1,2),cex=1.5)
+legend("right", legend=levels(factor(pheno$row)),bty='n',
+       cex=1.5,pch=17,col=cols)
+# If clustering by technical variables is present, batch effects can be adjusted for using ComBat or using covariates for batch in downstream analyses.
+# Example of ComBat
+# Impute missing Beta-values (ComBat will produce an error with missingness)
+# sum(is.na(betas.clean))
+# betas.impute = champ.impute(beta=betas.clean, pd=pheno, k=5, ProbeCutoff=0.2, SampleCutoff=0.1)
+# betas.impute = betas.impute$beta
+# Run ComBat
+# batch <- factor(pheno$Sentrix_ID)
+# modcombat <- model.matrix(~1, data = pheno)
+# betaCombat <- ComBat(dat = as.matrix(betas.impute), batch = batch, mod = modcombat)
+
 
 #' It would be useful to look at several traits with global variability
 cov<-data.frame(pheno[,2:9])
@@ -44,14 +66,14 @@ pcrplot(na.omit(betas.clean), cov, npc=10) # Already saved in working directory
 options(warn=-1)
 suppressMessages(library(wateRmelon))
 options(warn=0)
-DNAmAge<-as.vector(agep(beta))
+DNAmAge<-agep(beta)$horvath.age
 hist(DNAmAge)
 boxplot(DNAmAge);stripchart(DNAmAge, vertical = T,method = "jitter", add = T, pch = 20, col = 'red')
 
 #'Agreement between Horvath's Epigenetic age and Hannum's clock
 data(hannumCoef)
 length(hannumCoef)
-DNAmAge.Hannum<-as.vector(agep(beta,coeff=hannumCoef,method = "hannum"))
+DNAmAge.Hannum<-agep(beta,coeff=hannumCoef,method = "hannum")$custom_age
 
 
 #' Correlation; agreement

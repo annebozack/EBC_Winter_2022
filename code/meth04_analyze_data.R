@@ -19,6 +19,7 @@ suppressPackageStartupMessages({
   library(data.table) # for fast aggregation of large data 
   library(qqman) # for visualization of data
   library(stringi) # string manipulation
+  library(IlluminaHumanMethylation450kanno.ilmn12.hg19)
 })
 options(warn=0)
 
@@ -126,6 +127,7 @@ results2 = cpg.assoc(
 print(results2)
 
 #'using mvalues
+#' Use of M-values reduces heteroscedasticity to meet linear model assumptions, see [Du P, et al. BMC Bioinformatics. 2010](https://pubmed.ncbi.nlm.nih.gov/21118553/). 
 results3 <- cpg.assoc(
            betas.clean
           ,pheno$smoke_dummy
@@ -177,7 +179,28 @@ qqman::manhattan(datamanhat,chr="chr",bp="mapinfo",p="P.value",snp="probe_id"
    ,suggestiveline=FALSE, genomewideline = -log10(0.05/(nCpG)),ylim=c(0,8)
    ,main = "Manhattan Plot \n adjusted for cell proportions")
 
+
+#'# Introduction to limma 
+#' see [Smyth GK. Stat Appl Genet Mol Biol 2004](https://www.ncbi.nlm.nih.gov/pubmed/16646809).  
+suppressMessages(library(limma,minfi))
+
+#' First we need to define a model
+model <- model.matrix( ~smoker+sex+CD4+CD8+NK+B+MO+GR,data=pheno)
+EWAS.limma <- eBayes(lmFit(betas.clean, design=model))
+Top<-topTable(EWAS.limma, coef=2, number=Inf, sort.by="p")[1:10,]
+Top
+
+#' Bind results with annotation
+Annot<-as.data.frame(getAnnotation(IlluminaHumanMethylation450kanno.ilmn12.hg19))
+Annot.Tops<- Annot[match(rownames(Top),Annot$Name),]
+Annot.Tops<-Annot.Tops[,c("UCSC_RefGene_Name","UCSC_RefGene_Group","Relation_to_Island","chr","pos")]
+Top<-cbind(Top[,1:5], Annot.Tops)
+
+#' Order by chr and chromosomal position
+Top$chr = as.numeric(gsub("chr", "", Top$chr))
+Top[order(Top$chr,Top$pos),c(1,6,7,8,9,10)] 
+
 #' cleanup
-rm(nCpG,CpG.name,datamanhat,lambda,results1,results2,results3)
+rm(nCpG,CpG.name,datamanhat,lambda,results1,results2,results3,Annot.Tops,EWAS.limma,Top)
 gc()
 #' End of script 04
