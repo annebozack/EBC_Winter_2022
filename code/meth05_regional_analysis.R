@@ -58,7 +58,7 @@ boxplot(cpg2$beta ~ cpg2$smoker, col = c("blue", "red"), outline = F, xlab = 'sm
 
 #' Note that diffVar results may be influenced by outliers, and therefore it is helpful to visually inspect results.
 
-rm(Annot,Annot.Top.diffVar,Top.diffVar,EWAS.diffVar,betas.impute,cpg1,cpg2);gc()
+rm(Annot.Top.diffVar,Top.diffVar,EWAS.diffVar,betas.impute,cpg1,cpg2);gc()
 
 
 #'# Introduction to regional analyses with DMRcate
@@ -116,10 +116,10 @@ EWAS.combp <- EWAS.limma[,c("chr", "pos", "end", "P.Value")]
 colnames(EWAS.combp) <- c("chr", "start", "end", "p")
 EWAS.combp$probe = rownames(EWAS.combp)
 EWAS.limma$chr <- as.numeric(gsub("chr", "", EWAS.limma$chr)) # chr as numeric
-# run combp. Results saved in working directory
-combp(EWAS.combp, region_plot = F, mht_plot = F, dist.cutoff=1000, seed=0.001, verbose = T) # dist.cutoff = maximum distrance between basepairs to combine adjacent DMRs; seed = FDR significance threshold for initial selection of DMRs
+# Run combp. Results saved in working directory. For efficiency, we'll use output already generated.
+# combp(EWAS.combp, region_plot = F, mht_plot = F, dist.cutoff=1000, seed=0.001, verbose = T) # dist.cutoff = maximum distrance between basepairs to combine adjacent DMRs; seed = FDR significance threshold for initial selection of DMRs
 # read output
-combp.result = read.csv('resu_combp.csv')
+combp.result = read.csv('combp/resu_combp.csv')
 combp.result
 # regions chr2:233284401-233284934, chr6:29599011-29599390, and chr5:373298-373378 overlap with DMRcate results
 # comb-p has higher power to detect small effect sizes, but increased Type I error; see [Malid et al. Briefings in Bioinformatics 2019](https://academic.oup.com/bib/article/20/6/2224/5096828)

@@ -13,7 +13,7 @@ fromCRAN <- c(
 fromBioC <- c("minfi", "missMethyl", "ENmix","IlluminaHumanMethylation450kanno.ilmn12.hg19",
                       "IlluminaHumanMethylation450kmanifest", "IlluminaHumanMethylationEPICmanifest",
                       "sva", "IlluminaHumanMethylationEPICanno.ilm10b2.hg19","illuminaio", 
-                      "DMRcate", "shinyMethyl","bumphunter","wateRmelon","FDb.InfiniumMethylation.hg19","DMRcatedata","ChAMP")
+                      "DMRcate", "shinyMethyl","bumphunter","wateRmelon","FDb.InfiniumMethylation.hg19","DMRcatedata","ChAMP","FlowSorted.Blood.450k")
 
 #' install these from CRAN:
 toinstallCRAN <- setdiff(fromCRAN, installed.packages()[,1])

@@ -49,7 +49,7 @@ legend("right", legend=levels(factor(pheno$row)),bty='n',
 
 
 #' It would be useful to look at several traits with global variability
-cov<-data.frame(pheno[,2:9])
+cov<-data.frame(pheno[,c(2,6:11)])
 npc <- 20 # Top 20 PCs
 svd <- prcomp(t(na.omit(betas.clean)))
 screeplot(svd, npc, type = "barplot")
