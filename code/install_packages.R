@@ -7,13 +7,13 @@ fromCRAN <- c(
   ,"knitr", "matrixStats","reshape","glmnet"
   ,"statmod","XML"
   ,"pryr", "qqman", "RPMM", "MASS", "sandwich", "lmtest","foreach","doParallel"
-  ,"magrittr","purrr","svd","devtools","stringi","data.table"
+  ,"magrittr","purrr","svd","devtools","stringi","data.table","ggplot2"
   )
 
 fromBioC <- c("minfi", "missMethyl", "ENmix","IlluminaHumanMethylation450kanno.ilmn12.hg19",
                       "IlluminaHumanMethylation450kmanifest", "IlluminaHumanMethylationEPICmanifest",
                       "sva", "IlluminaHumanMethylationEPICanno.ilm10b2.hg19","illuminaio", 
-                      "DMRcate", "shinyMethyl","bumphunter","wateRmelon","FDb.InfiniumMethylation.hg19","DMRcatedata","ChAMP","FlowSorted.Blood.450k")
+                      "DMRcate", "shinyMethyl","bumphunter","wateRmelon","FDb.InfiniumMethylation.hg19","DMRcatedata","ChAMP")
 
 #' install these from CRAN:
 toinstallCRAN <- setdiff(fromCRAN, installed.packages()[,1])
@@ -36,6 +36,8 @@ if(length(toinstallBioC >= 1)) {
 
 devtools::install_github("hhhh5/ewastools@ebc2021")
 devtools::install_github("sailalithabollepalli/EpiSmokEr",type = "source") # not on CRAN
+devtools::install_github("annebozack/EWASplot")
+
 
 #' check that we were successful
 if(!all(c(toinstallBioC, toinstallCRAN) %in% installed.packages()[,1])) stop(

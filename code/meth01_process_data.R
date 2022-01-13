@@ -345,7 +345,7 @@ pheno = pheno[keep]
 beta  = beta[,keep]
 
 #' Keep only the columns relevant for downstream analysis
-pheno = pheno[,.(gsm,smoker,sex,CD4,CD8,NK,MO,GR,B)]
+pheno = pheno[,.(gsm,smoker,Sentrix_ID,row,col,sex,CD4,CD8,NK,MO,GR,B)]
 
 #' Also keep a copy of the manfist
 manifest = copy(meth$manifest)

@@ -75,6 +75,11 @@ pheno = pheno[c(
 
 dir.create("data",showWarnings=FALSE)
 
+# Adding chip and position information
+pheno$Sentrix_ID = substring(pheno$red, 79, 88)
+pheno$row = substring(pheno$red, 90, 92)
+pheno$col = substring(pheno$red, 93, 95)
+
 # Download .idat files
 map2(pheno$red,"data/" %s+% pheno$gsm %s+% "_Red.idat.gz", ~ download.file(.x,.y) ) %>% invisible
 map2(pheno$grn,"data/" %s+% pheno$gsm %s+% "_Grn.idat.gz", ~ download.file(.x,.y) ) %>% invisible
@@ -85,7 +90,7 @@ meth = read_idats("data/" %s+% pheno$gsm)
 pheno[,c("X","Y"):=check_sex(meth)]
 pheno[,sex:=ifelse(X>1.,"f","m")]
 
-pheno = pheno[,.(gsm,sex,smoker)]
+pheno = pheno[,.(gsm,sex,smoker,Sentrix_ID,row,col)]
 pheno[gsm=="GSM2260573",sex:="f"]
 
 write.csv(pheno,file="data/pheno.csv",row.names=FALSE)
